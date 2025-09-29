@@ -1,10 +1,14 @@
-# Aegis Guardrail Service
+## Disclaimer: 
 
-A universal, real-time policy enforcement and observability middleware for autonomous agents and IoT devices.
+This README.md was primarily written by an LLM, based on the Technical Design document I have written. There may be outdated/inaccurate information. 
+
+# Aegis Guardrail
+
+Policy enforcement and observability middleware for autonomous agents and IoT devices.
 
 ## Overview
 
-The Aegis Guardrail system acts as a centralized checkpoint, intercepting every intended action from an agent or its controller, evaluating it against a set of declarative policies, and then allowing, denying, or escalating the action. By decoupling policy from execution, Aegis provides a scalable and extensible framework for trust and safety across any autonomous platform.
+The Aegis Guardrail acts as a centralized checkpoint, intercepting every intended action from an agent or its controller, evaluating it against a set of declarative policies, and then allowing, denying, or escalating the action. By decoupling policy from execution, Aegis provides a scalable and extensible framework for trust and safety across any autonomous platform.
 
 ## Features
 
