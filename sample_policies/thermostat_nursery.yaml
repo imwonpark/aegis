@@ -1,0 +1,36 @@
+apiVersion: aegis.io/v1
+kind: Policy
+metadata:
+  name: thermostat-nursery-safety
+  description: "Prevents the nursery thermostat from being set too high or low."
+spec:
+  - rule:
+      name: temp-too-high
+      selector:
+        agent_type: "thermostat"
+        agent_id: "thermo-nursery-1"
+        action_name: "set_temperature"
+      conditions:
+        - context_field: "action.parameters.temperature_celsius"
+          operator: "gt"
+          value: 24
+      result:
+        action: "deny"
+        message: "Attempted to set nursery temperature above 24°C."
+        on_match:
+          escalate:
+            webhook_url: "https://notify.example.com/ops-alerts"
+            severity: "critical"
+  - rule:
+      name: temp-too-low
+      selector:
+        agent_type: "thermostat"
+        agent_id: "thermo-nursery-1"
+        action_name: "set_temperature"
+      conditions:
+        - context_field: "action.parameters.temperature_celsius"
+          operator: "lt"
+          value: 19
+      result:
+        action: "deny"
+        message: "Attempted to set nursery temperature below 19°C."

@@ -1,0 +1,40 @@
+apiVersion: aegis.io/v1
+kind: Policy
+metadata:
+  name: security-camera-privacy
+  description: "Controls when security cameras can be activated based on occupancy and time."
+spec:
+  - rule:
+      name: no-recording-when-occupied
+      selector:
+        agent_type: "security.camera"
+        action_name: "start_recording"
+      conditions:
+        - context_field: "environment.is_occupied"
+          operator: "eq"
+          value: true
+        - context_field: "environment.location"
+          operator: "eq"
+          value: "bedroom"
+      result:
+        action: "deny"
+        message: "Cannot start recording in occupied bedroom."
+        on_match:
+          escalate:
+            webhook_url: "https://alerts.security.example.com/privacy-breach"
+            severity: "warning"
+  - rule:
+      name: night-recording-allowed
+      selector:
+        agent_type: "security.camera"
+        action_name: "start_recording"
+      conditions:
+        - context_field: "environment.time_of_day_utc"
+          operator: "regex"
+          value: "T(2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]Z"  # 20:00-05:59 UTC
+        - context_field: "environment.is_occupied"
+          operator: "eq"
+          value: false
+      result:
+        action: "allow"
+        message: "Night recording allowed when location is unoccupied."
